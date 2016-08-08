@@ -1,0 +1,11 @@
+graph LR
+    A["HTTP"] --- B["NATS"];
+    B --- C["Core"];
+    B --- D["Auth"];
+    C --- E["MongoDB"]
+    C --- F["InfluxDB"]
+    G["WS"] --- B
+    H["MQTT"] --- B
+    I["CoAP"] --- B
+    J["Dashflux"] --- A
+    J --- G
