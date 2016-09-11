@@ -51,5 +51,10 @@ openssl s_client -showcerts -debug -connect localhost:443 -no_ssl2 -bugs
 
 ### Curl Testing
 ```bash
-curl --cacert tls/mainflux.crt https://localhost:7070/devices
+curl --cacert tls/mainflux.crt https://localhost:443/devices
+```
+or more verbose and with prett-print:
+```bash
+curl -v -s -i -H "Accept: application/json" -H "Content-Type: application/json" \
+  --cacert tls/mainflux.crt https://localhost:443/devices | json | pygmentize -l json
 ```
