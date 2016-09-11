@@ -20,3 +20,8 @@ openssl s_client -connect localhost:443 -no_ssl2 -bugs
 ```bash
 openssl s_client -showcerts -debug -connect localhost:443 -no_ssl2 -bugs
 ```
+
+### Curl Testing
+```bash
+curl --cacert tls/mainflux.crt https://localhost:7070/devices
+```
