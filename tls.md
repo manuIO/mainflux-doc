@@ -1,6 +1,6 @@
 # TLS in Mainflux
 
-## Key and Certiuficate Generation
+## Key and Certificate Generation
 Following the instructions [here](https://help.github.com/enterprise/11.10.340/admin/articles/using-self-signed-ssl-certificates/), [here](http://uwsgi-docs.readthedocs.io/en/latest/HTTPS.html) and especially [here](http://www.shellhacks.com/en/HowTo-Create-CSR-using-OpenSSL-Without-Prompt-Non-Interactive)
 
 Here is how we can do it:
