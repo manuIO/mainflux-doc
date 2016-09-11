@@ -4,7 +4,8 @@
 Following the instructions [here](https://help.github.com/enterprise/11.10.340/admin/articles/using-self-signed-ssl-certificates/), [here](http://uwsgi-docs.readthedocs.io/en/latest/HTTPS.html) and especially [here](http://www.shellhacks.com/en/HowTo-Create-CSR-using-OpenSSL-Without-Prompt-Non-Interactive)
 
 ```bash
-openssl req -nodes -newkey rsa:2048 -keyout mainflux.key -out mainflux.csr -subj "/C=FR/ST=IDF/L=Paris/O=Mainflux/OU=IoT/CN=localhost"
+openssl req -nodes -newkey rsa:2048 -keyout mainflux.key \
+  -out mainflux.csr -subj "/C=FR/ST=IDF/L=Paris/O=Mainflux/OU=IoT/CN=localhost"
 openssl x509 -req -days 365 -in mainflux.csr -signkey weioSSL.key -out mainflux.crt
 ```
 
