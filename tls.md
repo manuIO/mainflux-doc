@@ -3,10 +3,37 @@
 ## Key and Certiuficate Generation
 Following the instructions [here](https://help.github.com/enterprise/11.10.340/admin/articles/using-self-signed-ssl-certificates/), [here](http://uwsgi-docs.readthedocs.io/en/latest/HTTPS.html) and especially [here](http://www.shellhacks.com/en/HowTo-Create-CSR-using-OpenSSL-Without-Prompt-Non-Interactive)
 
+Here is how we can do it:
+
+- Create the private key:
+```bash
+openssl genrsa -out mainflux.key 2048
+```
+
+- Use this key to generate [CSR](https://en.wikipedia.org/wiki/Certificate_signing_request):
+```bash
+openssl req -new -key mainflux.key -out mainflux.csr
+```
+> Answer questions here and make sure the Common Name (CN) is set to the FQDN, hostname or IP address of the machine you're going to put this on. In our case we use `localhost`, as we do development on `localhost`
+
+- Use the same key to sign certificate. Normally it does not work this way - you would send `.csr` file to [CA](https://en.wikipedia.org/wiki/Certificate_authority) which will use their key (for example `ca.key`) to create `.crt` file for you and then send it back to you.
+But in our case we are creating self-signed certificate, and we use our private key to sign it:
+```bash
+openssl x509 -req -days 365 -in mainflux.csr -signkey mainflux.key -out mainflux.crt
+```
+
+Note that creating private key and creating `.csr` file can be done in one command:
 ```bash
 openssl req -nodes -newkey rsa:2048 -keyout mainflux.key \
   -out mainflux.csr -subj "/C=FR/ST=IDF/L=Paris/O=Mainflux/OU=IoT/CN=localhost"
 openssl x509 -req -days 365 -in mainflux.csr -signkey mainflux.key -out mainflux.crt
+```
+
+Finally, note that since we are not sending CSR to CA, but we are signing our certificate with our private key instead - we do not even need to generate `.csa` file. Then whole procedure can be done in just one command:
+```bash
+openssl req -x509 -nodes -newkey rsa:4096 \
+  -keyout mainflux.key -out mainflux.crt -days 365 \
+  -subj "/C=FR/ST=IDF/L=Paris/O=Mainflux/OU=IoT/CN=localhost"
 ```
 
 ## Iris and TLS
