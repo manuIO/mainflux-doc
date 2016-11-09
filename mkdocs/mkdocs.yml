@@ -1,0 +1,5 @@
+site_name: Mainflux
+pages:
+- Home: index.md
+- About: about.md
+theme: 'material'
