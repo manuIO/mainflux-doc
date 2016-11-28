@@ -59,7 +59,6 @@ markdown_extensions:
 
 pages:
 - Home: index.md
-- Install: install.md
 - Getting Started: getting-started.md
 - API Reference: api.md
 - License: license.md
