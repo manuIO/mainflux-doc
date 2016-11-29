@@ -33,15 +33,16 @@ Mainflux is built with <3 by [Mainflux Company](http://mainflux.com) and communi
 ## Architecture
 Mainflux IoT cloud is composed of several components, i.e. microservices:
 
-| Link          | Description           |
-|:--------------|:----------------------|
-| [mainflux-core](https://github.com/mainflux/mainflux-core) | Mainflux Core Service |
-| [mainflux-auth](https://github.com/mainflux/mainflux-auth) | Authentication and Authorization Server |
-| [mainflux-mqtt](https://github.com/mainflux/mainflux-mqtt) | MQTT PUB/SUB Broker (with WebSocket support) |
-| [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System Dashboard in Angular 2 Material |
+| Link                                                       | Description           |
+|:-----------------------------------------------------------|:----------------------|
+| [mainflux-core](https://github.com/mainflux/mainflux-core) | Mainflux core service |
+| [mainflux-auth](https://github.com/mainflux/mainflux-auth) | Authentication and authorization server |
+| [mainflux-mqtt](https://github.com/mainflux/mainflux-mqtt) | MQTT PUB/SUB broker (with WebSocket support) |
+| [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System dashboard in Angular 2 Material |
 | [mainflux-cli](https://github.com/mainflux/mainflux-cli)   | Interactive command-line interface |
-| [MongoDB](https://github.com/mongodb/mongo)                | Devices/Measurements NoSQL Database |
+| [MongoDB](https://github.com/mongodb/mongo)                | Devices/Measurements NoSQL database |
 | [Redis](https://github.com/antirez/redis)                  | System async events and caching |
+| [NATS](https://github.com/nats-io/gnatsd)                  | System enet bus |
 
 Docker composition that constitues Mainflux IoT infrastructure is defined in the [`docker-compose.yml`](https://github.com/Mainflux/mainflux/blob/master/docker-compose.yml).
 
