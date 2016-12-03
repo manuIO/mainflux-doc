@@ -22,7 +22,7 @@ We say that Mainflux is "multi-protocol" because it supports several networking 
 - HTTP
 - WebSocket
 - MQTT
-- LwM2M (CoAP)
+- LwM2M (CoAP) - WIP
 
 We say that Mainflux is "device-agnostic" because type of device that connects to it is completely transparent to
 Mainflux due it's generic internal device model (representation).
@@ -46,11 +46,6 @@ Mainflux IoT cloud is composed of several components, i.e. microservices:
 
 Docker composition that constitues Mainflux IoT infrastructure is defined in the [`docker-compose.yml`](https://github.com/Mainflux/mainflux/blob/master/docker-compose.yml).
 
-## Security
-For professional deployments Mainflux is usually combined with [Mainflux Authentication and Authorization Server](https://github.com/mainflux/mainflux-auth-server) which adds fine-grained security based on customizable API keys.
-
-Mainflux Auth Server also provides user accounts and device and application access control with simple customizable scheme based on scoped JWTs.
-
 ## Features
 An extensive (and incomplete) list of features includes:
 
@@ -63,18 +58,6 @@ An extensive (and incomplete) list of features includes:
 - Easy deployment and high system scalability via [Docker](https://www.docker.com/) images
 - Clear project roadmap, extensive development ecosystem and highly skilled developer community
 - And many more
-
-## Community
-### Mailing list
-[mainflux](https://groups.google.com/forum/#!forum/mainflux) Google group
-
-For quick questions and suggestions you can also use [GitHub Issues](https://github.com/Mainflux/mainflux/issues).
-
-### IRC
-[Mainflux Gitter](https://gitter.im/Mainflux/mainflux?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-### Twitter
-[@mainflux](https://twitter.com/mainflux)
 
 ## Authors
 Main architect and BDFL of Mainflux project is [@drasko](https://github.com/drasko). Additionaly, initial version of Mainflux was architectured and crafted by [@janko-isidorovic](https://github.com/janko-isidorovic), [@nmarcetic](https://github.com/nmarcetic) and [@mijicd](https://github.com/mijicd).
