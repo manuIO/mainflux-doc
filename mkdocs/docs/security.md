@@ -12,10 +12,10 @@ by creating additional API keys with different, in most cases lowered, permissio
 Internally, the service maintains a list of keys allowed to perform the requested
 action, per each of the available resources. Recognized actions are **Create**,
 **Retrieve**, **Update** and **Delete**, each of them corresponding to HTTP methods
-**POST**, **GET, **PUT** and **DELETE**, respectively.
+**POST**, **GET**, **PUT** and **DELETE**, respectively.
 
 The clients are obligated to provide the **Authorization** header, with the following
-content: *Bearer KEY*, KEY being the API key they're assigned with. Once the service
+content: **Bearer KEY**, KEY being the API key they're assigned with. Once the service
 intercept a request, it will try to find the provided key in the appropriate list. If
 the key is found, the request is allowed and vice versa.
 
