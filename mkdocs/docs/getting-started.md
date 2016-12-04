@@ -91,7 +91,7 @@ This ID is later used to authentificate device on the system.
 ### Provisioning Channels
 Channels are provisioned by executing a HTTP request `POST /channels`:
 ```bash
-drasko@Lenin:~$ curl -s -S -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels | json | pygmentize -l json
+curl -s -S -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels | json | pygmentize -l json
 ```
 
 Expected response:
