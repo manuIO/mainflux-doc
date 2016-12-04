@@ -36,7 +36,6 @@ theme: 'material'
 
 # Options
 extra:
-  version: 0.1
   logo: images/logo.png
   palette:
     primary: 'cyan'
@@ -45,7 +44,7 @@ extra:
     text: 'Roboto'
     code: 'Roboto Mono'
   github:
-    download_release: true
+    download_release: false
   author:
     github: mainflux/mainflux
     twitter: mainflux
