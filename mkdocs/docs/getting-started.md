@@ -19,14 +19,14 @@ docker-compose up
 Mainflux system is simple - it has only two main concepts: Devices and Channels.
 
 `Device` is used to represent any device that connects to Mainflux. It is thus a generic model
-that describes any client device of the system via following structure:
+that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux-core/blob/master/models/device.go).
 
 `Channel` is used to model a communication channel. It is a generic bidirectional message stream representation.
 Channles shold be looked at like MQTT topics - several devices or applications can subscribe or publish on a channel.
 All the values that flow through channels are persisted in the database.
 
 Using these two simple represenataions (Devices and Channels), it is possible to model complex IoT systems.
-`Device` structures will be used for device managelent while `Channlel` structures will be used for IoT messaging.
+`Device` structures will be used for device managelent while `Channel` structures will be used for IoT messaging.
 
 ## SenML
 Mainflux uses standardized message format called SenML to exchange IoT messages in the system.
