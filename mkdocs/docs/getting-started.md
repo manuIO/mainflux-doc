@@ -70,7 +70,7 @@ curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: applicatio
 ```
 
 > As a side note, `json` and `pygmentize` command line tools are used to get pretty-printing of `curl` results,
-> as explained in [this article](http://benw.me/posts/colourized-pretty-printed-json-with-curl/) 
+> as explained in [this article](http://benw.me/posts/colourized-pretty-printed-json-with-curl/)
 
 Expected response:
 ```
@@ -187,3 +187,11 @@ Publishing via MQTT is done in the similar way:
 mosquitto_pub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
+### Websockets
+Mainflux also supports Websockets, a MQTT over WS.
+Every modern browser or any device is now a potential full-fledged MQTT client.
+With publish/subscribe, quality of service and retain messages, clients like web apps can take full advantage of highly scalable messaging with a very low bandwidth footprint.
+
+Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/<channel_id>`.
+
+[Here](https://github.com/mainflux/mainflux-mqtt/blob/master/examples/paho-js-client/index.html) you will a example of web client implementation, using Eclipse [Paho javascript library](https://eclipse.org/paho/clients/js/)  
