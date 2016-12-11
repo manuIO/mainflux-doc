@@ -270,10 +270,12 @@ mosquitto_pub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 -m '[{"b
 ```
 
 ### Websockets
-Mainflux also supports Websockets, a MQTT over WS.
+Mainflux also supports Websockets with MQTT over WS.
 Every modern browser or any device is now a potential full-fledged MQTT client.
-With publish/subscribe, quality of service and retain messages, clients like web apps can take full advantage of highly scalable messaging with a very low bandwidth footprint.
+With publish/subscribe, quality of service and retain messages, clients like web apps can take full advantage
+of highly scalable messaging with a very low bandwidth footprint.
 
 Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/<channel_id>`.
 
-[Here](https://github.com/mainflux/mainflux-mqtt/blob/master/examples/paho-js-client/index.html) you will a example of web client implementation, using Eclipse [Paho javascript library](https://eclipse.org/paho/clients/js/)  
+[Here](https://github.com/mainflux/mainflux-mqtt/blob/master/examples/paho-js-client/index.html) you will
+find an example of web client implementation using Eclipse [Paho javascript library](https://eclipse.org/paho/clients/js/)  
