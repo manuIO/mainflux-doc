@@ -60,6 +60,7 @@ pages:
 - Home: index.md
 - Getting Started: getting-started.md
 - Security: security.md
+- CLI: cli.md
 - API Reference: api.md
 - DevOps: devops.md
 - Community: community.md
