@@ -187,87 +187,119 @@ and plugs the device in each of them.
 ## Publishing values
 Once `Channel` is provisioned it is possible to start publishing values (measurements on the channel).
 
-This can be done via two protocols:
+This can be done via several protocols:
+
 - HTTP RESTful API
 - MQTT
+- WS (MQTT over WS)
 
 ### HTTP
 
+Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/<channel_id>/msg`:
+
+- Senf message on the channel: `POST /channels/<channel_id>/msg <JSON_SenML_string>`
+- Get messages from the channel: `GET /channels/<channel_id>/msg`
+
 ```
-curl -s -S -i -X PUT -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 -d '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
+curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/msg -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
 
 HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
-Date: Tue, 29 Nov 2016 23:28:41 GMT
-Content-Length: 40
+Date: Sun, 18 Dec 2016 18:25:36 GMT
+Content-Length: 28
 
 {
-  "response": "channel update published"
+  "response": "message sent"
 }
 ```
 
-Check if the values were updated:
+Check if the messages have been written on the channel:
 
 ```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 | json | pygmentize -l json
+curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/msg' | json | pygmentize -l json
 
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
-Date: Tue, 29 Nov 2016 23:25:10 GMT
-Content-Length: 737
+Date: Sun, 18 Dec 2016 18:26:27 GMT
+Content-Length: 627
 
-{
-  "id": "5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9",
-  "visibility": "private",
-  "owner": "",
-  "entries": [
-    {
-      "bn": "e35b157f-21b8-4adb-ab59-9df21461c815",
-      "bver": 5,
-      "n": "voltage",
-      "u": "V",
-      "t": 1276020076.001,
-      "v": 120.1,
-      "publisher": "e35b157f-21b8-4adb-ab59-9df21461c815",
-      "timestamp": "2016-11-29T23:24:44Z"
-    },
-    {
-      "bn": "e35b157f-21b8-4adb-ab59-9df21461c815",
-      "n": "current",
-      "u": "A",
-      "t": 1276020071.001,
-      "v": 1.2,
-      "publisher": "e35b157f-21b8-4adb-ab59-9df21461c815",
-      "timestamp": "2016-11-29T23:24:44Z"
-    },
-    {
-      "bn": "e35b157f-21b8-4adb-ab59-9df21461c815",
-      "n": "current",
-      "u": "A",
-      "t": 1276020072.001,
-      "v": 1.3,
-      "publisher": "e35b157f-21b8-4adb-ab59-9df21461c815",
-      "timestamp": "2016-11-29T23:24:44Z"
-    }
-  ],
-  "created": "2016-11-29T21:58:48Z",
-  "updated": "2016-11-29T23:24:44Z",
-  "metadata": {}
-}
+[
+  {
+    "bver": 5,
+    "n": "some-base-name:voltage",
+    "u": "V",
+    "t": 1276020076.001,
+    "v": 120.1,
+    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
+    "timestamp": "2016-12-18T18:25:36Z",
+    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
+  },
+  {
+    "bver": 5,
+    "n": "some-base-name:current",
+    "u": "A",
+    "t": 1276020071.001,
+    "v": 1.2,
+    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
+    "timestamp": "2016-12-18T18:25:36Z",
+    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
+  },
+  {
+    "bver": 5,
+    "n": "some-base-name:current",
+    "u": "A",
+    "t": 1276020072.001,
+    "v": 1.3,
+    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
+    "timestamp": "2016-12-18T18:25:36Z",
+    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
+  }
+]
 ```
+
+`GET /channels/<channel_id>/msg` supports also query parameters, so you can filter your serach by time interval like this:
+```
+curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/msg?start_time=1276020071.9&end_time=1276020075.999' | json | pygmentize -l json
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 18 Dec 2016 18:30:15 GMT
+Content-Length: 209
+
+[
+  {
+    "bver": 5,
+    "n": "some-base-name:current",
+    "u": "A",
+    "t": 1276020072.001,
+    "v": 1.3,
+    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
+    "timestamp": "2016-12-18T18:25:36Z",
+    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
+  }
+]
+```
+
+> Note that `start_time` and `end_time` should be in UNIX time format - i.e. float64 number.
+>
+> Note also that `publisher` is automatically derived from MQTT client ID and set by the Mainflux system
+> - there is no action needed from user.
 
 ### MQTT
 Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/<channel_id>` you would get the message published via HTTP:
 
 ```
 mosquitto_sub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9
+
 [{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]
 ```
 
 Publishing via MQTT is done in the similar way:
 ```
-mosquitto_pub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub -i 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52 -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
+
+> Note the `-i` option to `mosquitto_pub`: it tells to MQTT broker the client ID of the publisher by providing it `deviceID` of the device which sends the message
 
 ### Websockets
 Mainflux also supports Websockets with MQTT over WS.
