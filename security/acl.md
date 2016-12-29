@@ -3,10 +3,9 @@
 Authorization (AuthZ) in Mainflux is obtained via Policy based Access Control, as implemented in [Ladon](https://github.com/ory-am/ladon). On it's turn, Ladon was inspired by [AWS IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html).
 
 ## Entities
-There are 4 types of entities in Mainflux:
+There are 3 types of entities in Mainflux that can send/recieve requests:
 - User
 - Device
-- Channel
 - Application
 
 Each entity can get a token that is used for AuthX and AuthZ.
