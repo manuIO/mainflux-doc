@@ -18,10 +18,10 @@ Tokens in Mainflux have 2 roles:
 
 Example of token structure:
 ```json
-token: {
+{
   "mainflux-id": "<device_id>",
   "type": "device",
-  "policy-id": "<policy_id>"
+  "api-key": "<api-key-id>"
 }
 ```
 
@@ -33,16 +33,31 @@ This is the process of AC:
 - Token is decrypted and verified
 - Token body is retrieved and "id" field is read
 - At this point AuthX part is finished - we know the identity of the entity that sent the request
-- We now read "policy-id" and use this as a "subject" in Ladon's Warden
-- Example of policy to send to Warden when`GET /channels/<channel_id>` was executed:
-```json
-{
-  "subject": "<policy-id>",
-  "action" : "read",
-  "resource": "channels/<channel_id>",
+- We now read "api-key" and use this as a "subject" in Ladon's Warden
+- Example of Warden check when`GET /channels/<channel_id>` was executed:
+```go
+var err = warden.IsAllowed(&ladon.Request{
+    // ...
+    Subject: "<mainflux-id>",
+    Action: "read"
+    Resource: "channels/<channel_id>",
+    Context: &ladon.Context{
+         "api-key": "<api-key>",
+    },
 }
 ```
 In this JSON `<policy-id>` is read from bearer token, and it is a subject used to create all policies belonging to this token (tokens can be observed as API key), and `resource` field is read from request URI.
+
+## Policies and API Key
+An entity in Mainflux is uniquely identified by it's UUID. We can create different Ladon policies for one entity, but if we use the same Entity ID in a `subject` body and only `EqualsSubjectCondition` then all the policies will be applied to our entity. 
+
+What we want is to create a different access scenarios (cases) - i.e. different API keys.
+
+One API key can be regarded as a group of policies, all applied one after another to create a unique access scenario. We group these policies in one access scenario by adding `StringMatchCondition` - all the policies from this group must match to the field `"api-key": "<some-unique-identifier>"`, and we produce this `api-key` identifier prior to making policies and provide it during the process of policy making.
+
+This way, although it is written into JWT and potentially burned in the falsh of some device, we can still change what `api-key` really means, i.e. what access scenario it really represents.
+
+
 
 
 
