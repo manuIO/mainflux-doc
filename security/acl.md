@@ -13,7 +13,7 @@ Each entity can get a token that is used for AuthX and AuthZ.
 ## Tokens
 Tokens in Mainflux have 2 roles:
 - Authentication, or AuthX - they uniquily identify the token bearer
-- Authorization, or AuthZ - they hold the Access Control Policy identifier
+- Authorization, or AuthZ - they hold the Access Control Policy group identifier (API Key)
 
 Example of token structure:
 ```json
