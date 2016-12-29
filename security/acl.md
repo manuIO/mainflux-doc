@@ -19,9 +19,9 @@ Tokens in Mainflux have 2 roles:
 Example of token structure:
 ```json
 token: {
-  mainflux-id: <device_id>
-  type: "device"
-  policy-id: <policy_id>
+  "mainflux-id": "<device_id>"
+  "type": "device"
+  "policy-id": "<policy_id>"
 }
 ```
 
