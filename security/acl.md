@@ -56,6 +56,29 @@ One API key can be regarded as a group of policies, all applied one after anothe
 
 This way, although it is written into JWT and potentially burned in the falsh of some device, we can still change what `api-key` really means, i.e. what access scenario it really represents.
 
+### Creating Policies
+#### Master Key (MK)
+- User API key called Master Key (MK) is created when user is created.
+- This key can do anything on both `/devices/*` and `/channels/*` resources
+
+#### Device Master Key (DMK)
+- DMK is created when a device is created
+- In the beginning it can only do all operations on `/devices/<device_id>`
+- As we connect it (plug) to the channels policies are added with the same `api-key` ID that it can do some (all) operations on `channels/<channel_id>`
+
+#### Application Master Key (AMK)
+- Same like DMK
+
+#### Secondary Keys
+- These keys are alway derived from equivalent Master Keys
+- They can be only **subset** in scope - never superset
+- First MK (or DMK or AMK) key is analyzed by retrieving all policies, overlapping them and thus generating a list of what is allowed (maximum set created by union of policies)
+- A subset of policies is choosen by the creator of new (secondary) API key
+- Out of this subset new policies are created with `"api-key": "<new_api_key>"` tag
+
+
+
+
 
 
 
