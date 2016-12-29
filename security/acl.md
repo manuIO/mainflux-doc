@@ -30,9 +30,9 @@ Out of this JWT is created and handed to the entity to be used as a bearer token
 This is the process of AC:
 - Entity (for example device) provides bearer token
 - Token is decrypted and verified
-- Token body is retrieved and "id" field is read
+- Token body is retrieved and `mainflux-id` field is read
 - At this point AuthX part is finished - we know the identity of the entity that sent the request
-- We now read "api-key" and use this as a "subject" in Ladon's Warden
+- We now read `api-key` and use this as a `context` condition in Ladon's Warden
 - Example of Warden check when`GET /channels/<channel_id>` was executed:
 ```go
 var err = warden.IsAllowed(&ladon.Request{
