@@ -31,7 +31,7 @@ openssl x509 -req -days 365 -in mainflux.csr -signkey mainflux.key -out mainflux
 
 Finally, note that since we are not sending CSR to CA, but we are signing our certificate with our private key instead - we do not even need to generate `.csa` file. Then whole procedure can be done in just one command:
 ```bash
-openssl req -x509 -nodes -newkey rsa:4096 \
+openssl req -x509 -nodes -newkey rsa:2048 \
   -keyout mainflux.key -out mainflux.crt -days 365 \
   -subj "/C=FR/ST=IDF/L=Paris/O=Mainflux/OU=IoT/CN=localhost"
 ```
