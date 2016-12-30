@@ -36,9 +36,6 @@ openssl req -x509 -nodes -newkey rsa:2048 \
   -subj "/C=FR/ST=IDF/L=Paris/O=Mainflux/OU=IoT/CN=localhost"
 ```
 
-## Iris and TLS
-Example here: https://github.com/iris-contrib/examples/tree/master/tls
-
 ## SSL Debugging
 Following the instructions [here](https://www.kamailio.org/wiki/tutorials/tls/testing-and-debugging)
 ```bash
