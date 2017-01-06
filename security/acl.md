@@ -2,6 +2,15 @@
 
 Authorization (AuthZ) in Mainflux is obtained via Policy based Access Control, as implemented in [Ladon](https://github.com/ory-am/ladon). On it's turn, Ladon was inspired by [AWS IAM Policies](http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html).
 
+## Concepts
+Mainflux security should be based on following concepts:
+- Client-side X.509 AuthX (something like [this](http://docs.aws.amazon.com/iot/latest/developerguide/x509-certs.html), or this[http://blog.nategood.com/client-side-certificate-authentication-in-ngi])
+- TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, as described [here](https://realtimelogic.com/ba/doc/en/C/shark/certmngmtIoT.html) and [here](https://www.axivo.com/articles/red-hat-meet-chacha20-and-poly1305.27/)
+- [Ladon](https://github.com/ory-am/ladon), something like [this](http://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html)
+
+> X.509 client-side looks like a better proposition than JWT bearer tokens. Although in the text below JWT is used, we should replace this by X.509 cetificate.
+> The rest can stay equivalent (access policies).
+
 ## Entities
 There are 3 types of entities in Mainflux that can send/recieve requests:
 - User
