@@ -4,7 +4,7 @@ Authorization (AuthZ) in Mainflux is obtained via Policy based Access Control, a
 
 ## Concepts
 Mainflux security should be based on following concepts:
-- Client-side X.509 AuthX (something like [this](http://docs.aws.amazon.com/iot/latest/developerguide/x509-certs.html), or [this](http://blog.nategood.com/client-side-certificate-authentication-in-ngi)
+- Client-side X.509 AuthX - something like [this](http://docs.aws.amazon.com/iot/latest/developerguide/x509-certs.html) or [this](http://blog.nategood.com/client-side-certificate-authentication-in-ngi)
 - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256, as described [here](https://realtimelogic.com/ba/doc/en/C/shark/certmngmtIoT.html) and [here](https://www.axivo.com/articles/red-hat-meet-chacha20-and-poly1305.27/)
 - [Ladon](https://github.com/ory-am/ladon), something like [this](http://docs.aws.amazon.com/iot/latest/developerguide/iot-policies.html)
 
