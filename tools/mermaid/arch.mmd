@@ -1,13 +1,15 @@
-graph TB
-    A["NGINX"] --- B["Auth"];
-	B --- R["Redis"]
-	A --- C["HTTP - Core"];
-    A --- D["MQTT - WS"];
+graph LR
+    A["NGINX"] --- B["HTTP-Core"];
+    B --- F["MongoDB"]
+
+    A --- C["MQTT - WS"];
+	A --- D["Auth"];
+	D --- R["Redis"]
 
 	B --- E["NATS"]
 	C --- E
 	D --- E
 
-    C --- F["MongoDB"]
-
-    G["Mainflux UI"] --- A
+    I["Mainflux UI"] --- A
+    G["Device"] --- A
+    H["App"] --- A
