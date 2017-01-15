@@ -1,4 +1,4 @@
-This directory holds diagrams made with [Mrrmaid](https://github.com/knsv/mermaid)
+This directory holds diagrams made with [Mermaid](https://github.com/knsv/mermaid)
 
 ```bash
 sudo npm install -g mermaid phantomjs
