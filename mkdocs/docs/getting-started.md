@@ -53,11 +53,11 @@ SenML permits multiple measurements to be sent in one message:
      {"n":"current","t":-2,"v":1.5},
      {"n":"current","t":-1,"v":1.6},
      {"n":"current","v":1.7}
-   ]
+]
 ```
 
 ## Provisioning
-Configuring and defininf Mainflux system begins by provisioning phase. It is necessary
+Configuring and defining Mainflux system begins by provisioning phase. It is necessary
 to provision in the system Devices and Channels that will be used.
 
 Proces of provisioning and configuration (i.e. control) of Mainflux is done by using HTTP RESTful API that
