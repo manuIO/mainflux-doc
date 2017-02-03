@@ -1,7 +1,7 @@
 # Mainflux
 
 ## About
-Mainflux is modern, highly-secured open source and patent-free IoT cloud platform written in Go and Erlang, based on a set of microservices.
+Mainflux is modern, highly-secured open source and patent-free IoT cloud platform written in Go, based on a set of microservices.
 
 It allows device, user and application connections over various network protocols, like HTTP, MQTT, WebSocket and CoAP, making a seamless bridge between them. It is used as the IoT middleware for building complex IoT solutions.
 
