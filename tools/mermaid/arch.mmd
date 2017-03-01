@@ -3,12 +3,17 @@ graph LR
     B --- F["MongoDB"]
 
     A --- C["MQTT - WS"];
+    A --- K["CoAP"];
 	A --- D["Auth"];
-	D --- R["Redis"]
 
 	B --- E["NATS"]
 	C --- E
 	D --- E
+	D --- R["Redis"]
+	K --- E
+
+	E --- T["Telegraf"]
+	T --- L["InfluxDB"]
 
     I["Mainflux UI"] --- A
     J["Mainflux CLI"] --- A
