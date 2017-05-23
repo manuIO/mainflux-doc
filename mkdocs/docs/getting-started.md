@@ -64,7 +64,7 @@ Mainflux server exposes for this purpose.
 ### Provisioning Devices
 Devices are provisioned by executing a HTTP request `POST /devices`:
 ```bash
-curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/devices | json | pygmentize -l json
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" http://localhost:9090/devices | json | pygmentize -l json
 ```
 
 > As a side note, `json` and `pygmentize` command line tools are used to get pretty-printing of `curl` results,
@@ -117,10 +117,10 @@ Publishing and retrieving messages (values) of one particular channels is done v
 - Get messages from the channel: `GET /channels/:channel_id/messages`
 
 ```
-curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
 
 HTTP/1.1 202 Accepted
-Content-Type: application/json; charset=utf-8
+Content-Type: application/senml+json; charset=utf-8
 Date: Sun, 18 Dec 2016 18:25:36 GMT
 Content-Length: 28
 
@@ -132,10 +132,10 @@ Content-Length: 28
 Check if the messages have been written on the channel:
 
 ```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages' | json | pygmentize -l json
+curl -s -S -i -X GET -H "Content-Type: application/senml+json" 'http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages' | json | pygmentize -l json
 
 HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
+Content-Type: application/senml+json; charset=utf-8
 Date: Sun, 18 Dec 2016 18:26:27 GMT
 Content-Length: 627
 
@@ -175,10 +175,10 @@ Content-Length: 627
 
 `GET /channels/:channel_id/messages` supports also query parameters, so you can filter your serach by time interval like this:
 ```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages?start_time=1276020071.9&end_time=1276020075.999' | json | pygmentize -l json
+curl -s -S -i -X GET -H "Content-Type: application/senml+json" 'http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages?start_time=1276020071.9&end_time=1276020075.999' | json | pygmentize -l json
 
 HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
+Content-Type: application/senml+json; charset=utf-8
 Date: Sun, 18 Dec 2016 18:30:15 GMT
 Content-Length: 209
 
