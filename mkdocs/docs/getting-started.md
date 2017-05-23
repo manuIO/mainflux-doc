@@ -111,13 +111,13 @@ This can be done via several protocols:
 
 ### HTTP
 
-Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/<channel_id>/msg`:
+Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages`:
 
-- Senf message on the channel: `POST /channels/<channel_id>/msg <JSON_SenML_string>`
-- Get messages from the channel: `GET /channels/<channel_id>/msg`
+- Senf message on the channel: `POST /channels/:channel_id/messages <JSON_SenML_string>`
+- Get messages from the channel: `GET /channels/:channel_id/messages`
 
 ```
-curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/msg -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
+curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
 
 HTTP/1.1 202 Accepted
 Content-Type: application/json; charset=utf-8
@@ -132,7 +132,7 @@ Content-Length: 28
 Check if the messages have been written on the channel:
 
 ```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/msg' | json | pygmentize -l json
+curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages' | json | pygmentize -l json
 
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
@@ -173,9 +173,9 @@ Content-Length: 627
 ]
 ```
 
-`GET /channels/<channel_id>/msg` supports also query parameters, so you can filter your serach by time interval like this:
+`GET /channels/:channel_id/messages` supports also query parameters, so you can filter your serach by time interval like this:
 ```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/msg?start_time=1276020071.9&end_time=1276020075.999' | json | pygmentize -l json
+curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" 'http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages?start_time=1276020071.9&end_time=1276020075.999' | json | pygmentize -l json
 
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
@@ -202,7 +202,7 @@ Content-Length: 209
 > - there is no action needed from user.
 
 ### MQTT
-Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/<channel_id>` you would get the message published via HTTP:
+Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id` you would get the message published via HTTP:
 
 ```
 mosquitto_sub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9
@@ -223,7 +223,7 @@ Every modern browser or any device is now a potential full-fledged MQTT client.
 With publish/subscribe, quality of service and retain messages, clients like web apps can take full advantage
 of highly scalable messaging with a very low bandwidth footprint.
 
-Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/<channel_id>`.
+Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/:channel_id`.
 
 [Here](https://github.com/mainflux/mainflux-mqtt/blob/master/examples/paho-js-client/index.html) you will
 find an example of web client implementation using Eclipse [Paho javascript library](https://eclipse.org/paho/clients/js/)  
