@@ -33,16 +33,26 @@ Mainflux is built with <3 by [Mainflux Company](http://mainflux.com) and communi
 ## Architecture
 Mainflux IoT cloud is composed of several components, i.e. microservices:
 
-| Link                                                       | Description           |
-|:-----------------------------------------------------------|:----------------------|
-| [mainflux-core](https://github.com/mainflux/mainflux-core) | Mainflux core service |
-| [mainflux-auth](https://github.com/mainflux/mainflux-auth) | Authentication and authorization server |
-| [mainflux-mqtt](https://github.com/mainflux/mainflux-mqtt) | MQTT PUB/SUB broker (with WebSocket support) |
-| [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System dashboard in Angular 2 Material |
+| Link          | Description           |
+|:--------------|:----------------------|
+| [mainflux-http-sender](https://github.com/mainflux/mainflux-http-sender) | HTTP message API server |
+| [mainflux-manager](https://github.com/mainflux/mainflux-manager) | Service for system provisioning |
+| [mainflux-influxdb-writer](https://github.com/mainflux/mainflux-influxdb-writer) | Wroker behind NATS that writes messages into DB |
+| [mainflux-influxdb-reader](https://github.com/mainflux/mainflux-influxdbreader) | HTTP API server for reading messages from DB |
+| [mainflux-auth](https://github.com/mainflux/mainflux-auth) | Authentication and Authorization Server |
+| [mainflux-mqtt](https://github.com/mainflux/mainflux-mqtt) | MQTT PUB/SUB Broker (with WebSocket support) |
+| [mainflux-coap](https://github.com/mainflux/mainflux-coap) | CoAP Server |
+| [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System Dashboard in Angular 2 Material |
 | [mainflux-cli](https://github.com/mainflux/mainflux-cli)   | Interactive command-line interface |
-| [MongoDB](https://github.com/mongodb/mongo)                | Devices/Measurements NoSQL database |
+| [MongoDB](https://github.com/mongodb/mongo)                | Devices/Measurements NoSQL Database |
+| [InfluxDB](https://github.com/influxdata/influxdb)         | Time-Series Database for Messages |
+| [PostgreSQL](hhttps://github.com/postgres/postgres)        | DB needed for Auth service (Hydra and Ladon) |
+| [Hydra](https://github.com/ory/hydra)                      | OAuth-2.0 Server |
 | [Redis](https://github.com/antirez/redis)                  | System async events and caching |
 | [NATS](https://github.com/nats-io/gnatsd)                  | System event bus |
+| [NGINX](https://github.com/nginx/nginx)                    | Reverse Proxy with Auth forwarding |
+
+![arch](https://raw.githubusercontent.com/mainflux/mainflux-doc/master/img/Architecture.png)
 
 Docker composition that constitues Mainflux IoT infrastructure is defined in the [`docker-compose.yml`](https://github.com/Mainflux/mainflux/blob/master/docker-compose.yml).
 
