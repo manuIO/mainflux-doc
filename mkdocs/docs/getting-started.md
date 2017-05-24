@@ -209,6 +209,7 @@ Here is important to note that we could not pass `Content-Type` in some kinf of 
 Mainflux currently supports `application/senml+json` and `application/octet-stream` (for sending custom binary blobs), but in the future a support for `application/senml+cbor` will be added.
 
 These topics are denoted as following:
+
 - `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/json`
 - `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/cbor`
 - `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/custom/octet-stream`
