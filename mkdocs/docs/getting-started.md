@@ -59,7 +59,7 @@ Configuring and defining Mainflux system begins by provisioning phase. It is nec
 to provision in the system Devices and Channels that will be used.
 
 Proces of provisioning and configuration (i.e. control) of Mainflux is done by using HTTP RESTful API that
-Mainflux server exposes for this purpose.
+[mainflux-manager](https://github.com/mainflux/mainflux-manager) server exposes for this purpose.
 
 ### Provisioning Devices
 Devices are provisioned by executing a HTTP request `POST /devices`:
@@ -111,13 +111,13 @@ This can be done via several protocols:
 
 ### HTTP
 
-Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages`:
+Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages` of [mainflux-http-sender](https://github.com/mainflux/mainflux-http-sender) service:
 
 - Senf message on the channel: `POST /channels/:channel_id/messages <JSON_SenML_string>`
 - Get messages from the channel: `GET /channels/:channel_id/messages`
 
 ```
-curl -s -S -i -X POST -H "Content-Type: application/senml+json" http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
 
 HTTP/1.1 202 Accepted
 Content-Type: application/senml+json; charset=utf-8
@@ -129,10 +129,10 @@ Content-Length: 28
 }
 ```
 
-Check if the messages have been written on the channel:
+Check if the messages have been written on the channel by reading from [mainflux-influxdb-reader](https://github.com/mainflux/mainflux-influxdb-reader) service:
 
 ```
-curl -s -S -i -X GET -H "Content-Type: application/senml+json" 'http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages' | json | pygmentize -l json
+curl -s -S -i -X GET -H "Content-Type: application/senml+json" 'http://localhost:7080/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages' | json | pygmentize -l json
 
 HTTP/1.1 200 OK
 Content-Type: application/senml+json; charset=utf-8
@@ -202,17 +202,28 @@ Content-Length: 209
 > - there is no action needed from user.
 
 ### MQTT
-Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id` you would get the message published via HTTP:
+Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id/<content_format>/<content_encoding>` you would get the message published via HTTP.
+
+Here is important to note that we could not pass `Content-Type` in some kinf of a header, as in the case of HTTP, so we use topic itself to denote the type of content that is sent over the channel.
+
+Mainflux currently supports `application/senml+json` and `application/octet-stream` (for sending custom binary blobs), but in the future a support for `application/senml+cbor` will be added.
+
+These topics are denoted as following:
+- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/json`
+- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/cbor`
+- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/custom/octet-stream`
+
+Example:
 
 ```
-mosquitto_sub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9
+mosquitto_sub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/json
 
 [{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]
 ```
 
 Publishing via MQTT is done in the similar way:
 ```
-mosquitto_pub -i 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52 -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9 -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub -i 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52 -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/seml/json -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
 > Note the `-i` option to `mosquitto_pub`: it tells to MQTT broker the client ID of the publisher by providing it `deviceID` of the device which sends the message
@@ -223,7 +234,7 @@ Every modern browser or any device is now a potential full-fledged MQTT client.
 With publish/subscribe, quality of service and retain messages, clients like web apps can take full advantage
 of highly scalable messaging with a very low bandwidth footprint.
 
-Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/:channel_id`.
+Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/:channel_id/senml/json`.
 
 [Here](https://github.com/mainflux/mainflux-mqtt/blob/master/examples/paho-js-client/index.html) you will
 find an example of web client implementation using Eclipse [Paho javascript library](https://eclipse.org/paho/clients/js/)  
