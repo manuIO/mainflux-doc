@@ -22,7 +22,7 @@ Mainflux system is simple - it has only two main concepts: Devices and Channels.
 that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux-core/blob/master/models/device.go).
 
 `Channel` is used to model a communication channel. It is a generic bidirectional message stream representation.
-Channles shold be looked at like MQTT topics - several devices or applications can subscribe or publish on a channel.
+Channels should be looked at like MQTT topics - several devices or applications can subscribe or publish on a channel.
 All the values that flow through channels are persisted in the database.
 
 Using these two simple represenataions (Devices and Channels), it is possible to model complex IoT systems.
