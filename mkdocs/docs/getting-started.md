@@ -204,29 +204,31 @@ Content-Length: 209
 > - there is no action needed from user.
 
 ### MQTT
-Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id/<content_format>/<content_encoding>` you would get the message published via HTTP.
+Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id/messages/<content_type>` you would get the message published via HTTP.
 
-Here is important to note that we could not pass `Content-Type` in some kinf of a header, as in the case of HTTP, so we use topic itself to denote the type of content that is sent over the channel.
+Here is important to note that we could not pass `Content-Type` in some kind of a header, as in the case of HTTP, so we use topic itself to denote the type of content that is sent over the channel.
 
 Mainflux currently supports `application/senml+json` and `application/octet-stream` (for sending custom binary blobs), but in the future a support for `application/senml+cbor` will be added.
 
 These topics are denoted as following:
 
-- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/json`
-- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/cbor`
-- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/custom/octet-stream`
+- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/senml-json`
+- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/senml-cbor`
+- `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/octet-stream`
+
+> Note that `+` is a wildcard character for MQTT topics, so we use `senml-json` to denote `application/senml+json` content type.
 
 Example:
 
 ```
-mosquitto_sub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/senml/json
+mosquitto_sub -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/senml-json
 
 [{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]
 ```
 
 Publishing via MQTT is done in the similar way:
 ```
-mosquitto_pub -i 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52 -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/seml/json -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+mosquitto_pub -i 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52 -t mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/seml-json -m '[{"bn":"e35b157f-21b8-4adb-ab59-9df21461c815","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
 > Note the `-i` option to `mosquitto_pub`: it tells to MQTT broker the client ID of the publisher by providing it `deviceID` of the device which sends the message
@@ -237,7 +239,7 @@ Every modern browser or any device is now a potential full-fledged MQTT client.
 With publish/subscribe, quality of service and retain messages, clients like web apps can take full advantage
 of highly scalable messaging with a very low bandwidth footprint.
 
-Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/:channel_id/senml/json`.
+Simiral to MQTT, Websockets API supports publish and subscribe to any channel/topic on same end point as MQTT  `mainflux/channels/:channel_id/messages/senml-json`.
 
 [Here](https://github.com/mainflux/mainflux-mqtt/blob/master/examples/paho-js-client/index.html) you will
 find an example of web client implementation using Eclipse [Paho javascript library](https://eclipse.org/paho/clients/js/)  
