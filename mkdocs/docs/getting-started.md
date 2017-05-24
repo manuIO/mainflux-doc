@@ -30,7 +30,7 @@ Using these two simple represenataions (Devices and Channels), it is possible to
 
 ## SenML
 Mainflux uses standardized message format called SenML to exchange IoT messages in the system.
-SenML is an IETF standard, and the latest standard draft can be found [here](https://tools.ietf.org/html/draft-ietf-core-senml-04)
+SenML is an IETF standard, and the latest standard draft can be found [here](https://tools.ietf.org/html/draft-ietf-core-senml-08)
 
 Mainflux messages are thus JSON representation of SenML array:
 
@@ -113,11 +113,13 @@ This can be done via several protocols:
 
 Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages` of [mainflux-http-sender](https://github.com/mainflux/mainflux-http-sender) service:
 
-- Senf message on the channel: `POST /channels/:channel_id/messages <JSON_SenML_string>`
+- Send message on the channel: `POST /channels/:channel_id/messages <JSON_SenML_string>`
 - Get messages from the channel: `GET /channels/:channel_id/messages`
 
+> **N.B.** publisher ID is passed to HTTP server via `Client-ID` header. In normal use-case this publisher ID is calculated automatically via `mainflux-auth` service and injected into the HTTP call via NGINX proxying, but for testing it can be added explicitly in the call.
+
 ```
-curl -s -S -i -X POST -H "Content-Type: application/senml+json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
+curl -s -S -i -X POST -H "Client-ID: 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52" -H "Content-Type: application/senml+json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]' | json | pygmentize -l json
 
 HTTP/1.1 202 Accepted
 Content-Type: application/senml+json; charset=utf-8
