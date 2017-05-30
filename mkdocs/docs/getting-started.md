@@ -8,6 +8,7 @@ Docker containers are provided for each [Mainflux component](http://mainflux.io/
 1. [Docker](https://www.docker.com/community-edition). If you are not familiar with Docker, take a moment to install Docker and work through the Quickstart guide. We'll still be here.
 2. [jq](https://stedolan.github.io/jq/download/) (optional). Pretty printing json in your terminal.
 3. [Mosquitto](https://mosquitto.org/download/) (optional). Mainflux MQTT require the mosquitto cli broker.
+4. [Go](https://golang.org/dl/) (optional). Minimum version required is 1.7.
 
 ## Installation
 To install and deploy the Mainflux system, clone the repo:
