@@ -24,7 +24,7 @@ docker-compose up
 The Mainflux system is simple - it has only two main concepts: Devices and Channels.
 
 1. `Device` is used to represent any device that connects to Mainflux. It is a generic model
-that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux-core/blob/master/models/device.go).
+that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux-manager/blob/master/models/device.go).
 
 2. `Channel` is used to model a communication channel. It is a generic bidirectional message stream representation.
 Channels are like MQTT topics - several devices or applications can subscribe or publish on a channel.
