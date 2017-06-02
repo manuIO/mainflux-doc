@@ -91,7 +91,90 @@ List your Channels:
 curl http://localhost:9090/channels | jq
 ```
 
-## Publishing on a Channel
+### Connecting Devices and Channels (Plug)
+In Mainflux IoT system, `Channel` should be observed as a MQTT topic or as a data bus - messages flow bidirectionally through the channel.
+Many devices and applications can be connected (plugged) to the channel (if they can provide adequate credentials),
+and than all connected entities will recieve the message. In this way a channel also becomes some sort of device grouping,
+but only for communication purposes.
+
+> Note that `Channel` is a data bus with broadcast-only addressing - everybody gets the message.
+> It is currently not possible to send message just to some devices on the channle, while hiding it from others.
+> If you have this use-case, then just create new channels which will be private for
+> only these devices (i.e. plug only these devices into these channels)
+
+Since we observe channel as a data bus, we say that device is "plugged into" the channel
+in order to obtain conection (i.e. to be capable to publish and get messages from the channel).
+This is obtained using the `POST /channels/<channel_id>/plug` and/or `POST /devices/<device_id>/plug` endpoint.
+
+Syntax is following:
+```
+curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/plug -d '["66990b46-8736-4182-ba21-8dabaadb27ff", "97bd76d3-8f8f-4e1f-8c20-4a6c84d3575f", "a76539f2-8cdf-4568-bdbd-f1c617e5516a"]' | json | pygmentize -l json
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 11 Dec 2016 19:46:40 GMT
+Content-Length: 69
+
+{
+  "response": "plugged",
+  "id": "78c95058-7ef3-454f-9f60-82569ddec4e2"
+}
+```
+
+Then you can observe that devices you plugged are recorded in the Channel's `Devices` list:
+```
+curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2 | jq
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 11 Dec 2016 19:47:54 GMT
+Content-Length: 301
+
+{
+  "id": "78c95058-7ef3-454f-9f60-82569ddec4e2",
+  "visibility": "private",
+  "owner": "",
+  "entries": [],
+  "devices": [
+    "66990b46-8736-4182-ba21-8dabaadb27ff",
+    "97bd76d3-8f8f-4e1f-8c20-4a6c84d3575f",
+    "a76539f2-8cdf-4568-bdbd-f1c617e5516a"
+  ],
+  "created": "2016-12-11T19:21:30Z",
+  "updated": "2016-12-11T19:46:40Z",
+  "metadata": {}
+}
+```
+
+Also, `ChannelID` has been recorded in any of the devices' internal structure:
+```
+curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/devices/66990b46-8736-4182-ba21-8dabaadb27ff | jq
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 11 Dec 2016 19:50:20 GMT
+Content-Length: 306
+
+{
+  "id": "66990b46-8736-4182-ba21-8dabaadb27ff",
+  "name": "Some Name",
+  "description": "",
+  "online": false,
+  "connected_at": "",
+  "disconnected_at": "",
+  "channels": [
+    "78c95058-7ef3-454f-9f60-82569ddec4e2"
+  ],
+  "created": "2016-12-11T19:09:50Z",
+  "updated": "2016-12-11T19:46:40Z",
+  "metadata": {}
+}
+```
+
+There is also equivalent command `POST /devices/<device_id>/plug` which takes as an argument a list of channels
+and plugs the device in each of them.
+
+## Publishing Values (on a Channel)
 Once a Channel is provisioned it is possible to start publishing measurements on the channel.
 
 This can be done via several protocols:
