@@ -35,18 +35,17 @@ Mainflux IoT cloud is composed of several components, i.e. microservices:
 
 | Link          | Description           |
 |:--------------|:----------------------|
-| [mainflux-http-sender](https://github.com/mainflux/mainflux-http-sender) | HTTP message API server |
-| [mainflux-manager](https://github.com/mainflux/mainflux-manager) | Service for system provisioning |
-| [mainflux-influxdb-writer](https://github.com/mainflux/mainflux-influxdb-writer) | Wroker behind NATS that writes messages into DB |
-| [mainflux-influxdb-reader](https://github.com/mainflux/mainflux-influxdbreader) | HTTP API server for reading messages from DB |
-| [mainflux-auth](https://github.com/mainflux/mainflux-auth) | Authentication and Authorization Server |
+| [httpadapter](https://github.com/mainflux/httpadapter) | HTTP message API server |
+| [manager](https://github.com/mainflux/manager) | Service for managing platform resources, including auth |
+| [mainflux-influxdb-writer](https://github.com/mainflux/mainflux-influxdb-writer) | Worker behind NATS that writes messages into DB |
+| [mainflux-influxdb-reader](https://github.com/mainflux/mainflux-influxdb-reader) | HTTP API server for reading messages from DB |
 | [mainflux-mqtt](https://github.com/mainflux/mainflux-mqtt) | MQTT PUB/SUB Broker (with WebSocket support) |
 | [mainflux-coap](https://github.com/mainflux/mainflux-coap) | CoAP Server |
 | [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System Dashboard in Angular 2 Material |
 | [mainflux-cli](https://github.com/mainflux/mainflux-cli)   | Interactive command-line interface |
 | [MongoDB](https://github.com/mongodb/mongo)                | Devices/Measurements NoSQL Database |
 | [InfluxDB](https://github.com/influxdata/influxdb)         | Time-Series Database for Messages |
-| [PostgreSQL](hhttps://github.com/postgres/postgres)        | DB needed for Auth service (Hydra and Ladon) |
+| [PostgreSQL](https://github.com/postgres/postgres)        | DB needed for Auth service (Hydra and Ladon) |
 | [Hydra](https://github.com/ory/hydra)                      | OAuth-2.0 Server |
 | [Redis](https://github.com/antirez/redis)                  | System async events and caching |
 | [NATS](https://github.com/nats-io/gnatsd)                  | System event bus |
