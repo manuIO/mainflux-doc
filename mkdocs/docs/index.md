@@ -54,6 +54,7 @@ Docker composition that constitues Mainflux IoT infrastructure is defined in the
 
 ### Features
 An extensive (and incomplete) list of features includes:
+
 - Responsive and scalable architecture based on a set of [microservices](https://en.wikipedia.org/wiki/Microservices)
 - Set of clean APIs: HTTP RESTful, MQTT, WebSocket and CoAP
 - SDK - set of client libraries for many HW platforms in several programming languages: C/C++, JavaScript, Go and Python
