@@ -38,7 +38,6 @@ Mainflux IoT cloud is composed of several components, i.e. microservices:
 | [http-adapter](https://github.com/mainflux/http-adapter) | HTTP message API server |
 | [manager](https://github.com/mainflux/manager) | Service for managing platform resources, including auth |
 | [message-writer](https://github.com/mainflux/message-writer) | Worker behind NATS that writes messages into Cassandra DB |
-| message-reader (WIP) | HTTP API server for reading messages from DB |
 | [mqtt-adapter](https://github.com/mainflux/mqtt-adapter) | MQTT PUB/SUB Broker (with WebSocket support) |
 | [mainflux-coap](https://github.com/mainflux/mainflux-coap) | CoAP Server |
 | [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System Dashboard in Angular 2 Material |
