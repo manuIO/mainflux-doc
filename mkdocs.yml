@@ -35,8 +35,8 @@ copyright: Copyright (c) 2016 Mainflux
 theme: 'readthedocs'
 
 # Options
-#extra:
-#  logo: images/logo.png
+extra:
+  logo: images/logo.png
 #  palette:
 #    primary: 'cyan'
 #    accent: 'teal'
@@ -45,9 +45,9 @@ theme: 'readthedocs'
 #    code: 'Roboto Mono'
 #  github:
 #    download_release: false
-#  author:
-#    github: mainflux/mainflux
-#    twitter: mainflux
+  author:
+    github: mainflux/mainflux
+    twitter: mainflux
 
 # Extensions
 #markdown_extensions:
