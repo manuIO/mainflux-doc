@@ -35,26 +35,26 @@ copyright: Copyright (c) 2016 Mainflux
 theme: 'readthedocs'
 
 # Options
-extra:
-  logo: images/logo.png
-  palette:
-    primary: 'cyan'
-    accent: 'teal'
+#extra:
+#  logo: images/logo.png
+#  palette:
+#    primary: 'cyan'
+#    accent: 'teal'
 #  font:
 #    text: 'Roboto'
 #    code: 'Roboto Mono'
-  github:
-    download_release: false
-  author:
-    github: mainflux/mainflux
-    twitter: mainflux
+#  github:
+#    download_release: false
+#  author:
+#    github: mainflux/mainflux
+#    twitter: mainflux
 
 # Extensions
-markdown_extensions:
-  - codehilite(css_class=code)
-  - admonition
-  - toc:
-      permalink: '#'
+#markdown_extensions:
+#  - codehilite(css_class=code)
+#  - admonition
+#  - toc:
+#      permalink: '#'
 
 pages:
 - Home: index.md
