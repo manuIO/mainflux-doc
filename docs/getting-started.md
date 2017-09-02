@@ -63,18 +63,30 @@ SenML permits multiple measurements to be sent in one message. This message cont
 ```
 
 ## Creating User
+### Create User Account
+Use the Mainflux [manager](https://github.com/mainflux/manager) HTTP/REST API to create user account:
 ```bash
-curl -s -S -i -X POST -H "Content-Type: application/senml+json" localhost:8180/users -d '{"email":"john.doe@mainflux.com", "password":"123"}'
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" localhost:8180/users -d '{"email":"john.doe@email.com", "password":"123"}'
+```
+### Create User Token (Authorization Key)
+In order for this user to be capable to authenticate to the system, we must create for him an authorization key - i.e. user token:
+```bash
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" localhost:8180/tokens -d '{"email":"john.doe@email.com", "password":"123"}'
+```
+
+Response:
+```bash
+{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDQ0MzE5MDUsImlhdCI6MTUwNDM5NTkwNSwiaXNzIjoibWFpbmZsdXgiLCJzdWIiOiJqb2huLmRvZUBlbWFpbC5jb20ifQ.BhcQCuSKy-XLG9tYa5wp8Suue8sOQ7pAgRPiExVzgwo"}
 ```
 
 ## System Provisioning
-Configuring your Mainflux system begins with a provisioning phase. Use the [mainflux-manager](https://github.com/mainflux/mainflux-manager) HTTP/REST API to provision Devices and Channels.
+Configuring your Mainflux system begins with a provisioning phase. Use the Mainflux [manager](https://github.com/mainflux/manager) HTTP/REST API to provision Devices, Applications and Channels.
 
 ### Provisioning Devices
 Devices are provisioned by executing a HTTP request `POST /clients`, with a `"type":"device"` specified in the payload JSON.
 
 !!! note
-     You will need `user_auth_key`, i.e. user JWT token obtained when user was created
+     You will need `user_auth_key`, i.e. user token
 
 ```bash
 curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <user_auth_key>" localhost:8180/clients -d '{"type":"device", "name":"weio"}'
@@ -84,12 +96,12 @@ Notice the UUID of the device in the Location header of the HTTP response:
 ```
 HTTP/1.1 201 Created
 Content-Type: application/json; charset=utf-8
-Location: /devices/2670ae6d-0cdb-43b9-8cf4-b7f31a1d0a43
-Date: Fri, 26 May 2017 04:12:53 GMT
+Location: /clients/8293b8fa-9039-11e7-b6e2-080027b77be6
+Date: Sat, 02 Sep 2017 23:50:33 GMT
 Content-Length: 0
 ```
 
-It is important to note that the Mainflux system generates a UUID for each Device or Channel it creates.
+It is important to note that the Mainflux system generates a UUID for each Device, Application or Channel it creates.
 This ID is later used to authenticate each Device on the system.
 
 ### Provisioning Channels
