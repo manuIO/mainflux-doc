@@ -5,7 +5,7 @@ Mainflux is modern, highly-secured open source and patent-free IoT cloud platfor
 
 It allows device, user and application connections over various network protocols, like HTTP, MQTT, WebSocket and CoAP, making a seamless bridge between them. It is used as the IoT middleware for building complex IoT solutions.
 
-![gophersBanner](https://github.com/mainflux/doc/blob/master/docs/images/gopherBanner.jpg)
+![gophersBanner](img/gopherBanner.jpg)
 
 More precisely, Mainflux is multi-protocol device-agnostic message relay with distributed time-series
 data storage and multi-user, multi-tenant device and application management middleware.
@@ -47,7 +47,7 @@ Mainflux IoT cloud is composed of several components, i.e. microservices:
 | [NATS](https://github.com/nats-io/gnatsd)                  | System event bus |
 | [NGINX](https://github.com/nginx/nginx)                    | Reverse Proxy with Auth forwarding |
 
-![arch](https://github.com/mainflux/doc/blob/master/docs/images/architecture.jpg)
+![arch](img/architecture.jpg)
 
 Docker composition that constitues Mainflux IoT infrastructure is defined in the [`docker-compose.yml`](https://github.com/Mainflux/mainflux/blob/master/docker-compose.yml).
 
