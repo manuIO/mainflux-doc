@@ -97,6 +97,7 @@ Many devices and applications can be connected (plugged) to the channel (if they
 and than all connected entities will recieve the message. In this way a channel also becomes some sort of device grouping,
 but only for communication purposes.
 
+!!! note
 > Note that `Channel` is a data bus with broadcast-only addressing - everybody gets the message.
 > It is currently not possible to send message just to some devices on the channle, while hiding it from others.
 > If you have this use-case, then just create new channels which will be private for
