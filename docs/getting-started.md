@@ -21,18 +21,21 @@ Then start the Docker composition:
 docker-compose up
 ```
 
-## Base Concepts - Devices and Channels
-The Mainflux system is simple - it has only two main concepts: Devices and Channels.
+## Basic Concepts
+The Mainflux system operates on four main entities (data structures): Users, Devices, Channels and Applications. Devices and Applications are **clients** of the Mainflux system (i.e. they connect to Mainflux servers and send/receive some messages).
 
-1. `Device` is used to represent any device that connects to Mainflux. It is a generic model
-that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux-manager/blob/master/models/device.go).
+1. `User` represents the real (human) user of the system. User logs into the system and creates some assets - Devices and Applications - that he will own and manage later though Mainflux system. User structure can be seen [here](https://github.com/mainflux/manager/blob/master/users.go)
 
-2. `Channel` is used to model a communication channel. It is a generic bidirectional message stream representation.
+2. `Device` is used to represent any device that connects to Mainflux. It is a generic model
+that describes any client device of the system via simple structure like [this](https://github.com/mainflux/manager/blob/master/clients.go).
+
+3. `Application` is very similar to the `Device` and is represented by the same `Client` structure (just with different `type` field). Application represents an end-user application that communicates with devices via Mainflux, and can be running somewhere in the cloud, locally on the PC or on the mobile phone - it is usually some UI app that shows dashboards and graphs of the sensor measurements.
+
+3. `Channel` is used to model a communication channel. It is a generic bidirectional message stream representation.
 Channels are like MQTT topics - several devices or applications can subscribe or publish on a channel.
 All the values that flow through channels are persisted in the database.
 
-Using these two simple representations (Devices and Channels), it is possible to model complex IoT systems.
-`Device` structures will be used for device management while `Channel` structures will be used for IoT messaging.
+Using these four simple representations (Users, Devices, Applications and Channels), it is possible to model complex IoT systems, which mostly include device amangement and IoT messaging tasks.
 
 ## SenML
 Mainflux uses an [IETF standardized message format called SenML](https://tools.ietf.org/html/draft-ietf-core-senml-08) to exchange IoT messages in the system.
@@ -59,13 +62,22 @@ SenML permits multiple measurements to be sent in one message. This message cont
 ]
 ```
 
-## Provisioning
+## Creating User
+```bash
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" localhost:8180/users -d '{"email":"john.doe@mainflux.com", "password":"123"}'
+```
+
+## System Provisioning
 Configuring your Mainflux system begins with a provisioning phase. Use the [mainflux-manager](https://github.com/mainflux/mainflux-manager) HTTP/REST API to provision Devices and Channels.
 
 ### Provisioning Devices
-Devices are provisioned by executing a HTTP request `POST /devices`:
+Devices are provisioned by executing a HTTP request `POST /clients`, with a `"type":"device"` specified in the payload JSON.
+
+!!! note
+     You will need `user_auth_key`, i.e. user JWT token obtained when user was created
+
 ```bash
-curl -s -S -i -X POST -H "Content-Type: application/senml+json" http://localhost:9090/devices
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <user_auth_key>" localhost:8180/clients -d '{"type":"device", "name":"weio"}'
 ```
 
 Notice the UUID of the device in the Location header of the HTTP response:
