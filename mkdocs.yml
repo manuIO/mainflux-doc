@@ -40,9 +40,9 @@ extra:
   palette:
     primary: 'cyan'
     accent: 'teal'
-  font:
-    text: 'Roboto'
-    code: 'Roboto Mono'
+#  font:
+#    text: 'Roboto'
+#    code: 'Roboto Mono'
   github:
     download_release: false
   author:
