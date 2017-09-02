@@ -98,10 +98,10 @@ and than all connected entities will recieve the message. In this way a channel 
 but only for communication purposes.
 
 !!! note
-> Note that `Channel` is a data bus with broadcast-only addressing - everybody gets the message.
-> It is currently not possible to send message just to some devices on the channle, while hiding it from others.
-> If you have this use-case, then just create new channels which will be private for
-> only these devices (i.e. plug only these devices into these channels)
+     Note that `Channel` is a data bus with broadcast-only addressing - everybody gets the message.
+     It is currently not possible to send message just to some devices on the channle, while hiding it from others.
+     If you have this use-case, then just create new channels which will be private for
+     only these devices (i.e. plug only these devices into these channels)
 
 Since we observe channel as a data bus, we say that device is "plugged into" the channel
 in order to obtain conection (i.e. to be capable to publish and get messages from the channel).
