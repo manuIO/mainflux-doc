@@ -32,7 +32,7 @@ repo_url: https://github.com/mainflux/mainflux
 copyright: Copyright (c) 2016 Mainflux
 
 # Documentation and theme
-theme: 'material'
+theme: 'readthedocs'
 
 # Options
 extra:
