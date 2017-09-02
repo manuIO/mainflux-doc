@@ -191,7 +191,8 @@ Publishing and retrieving messages (values) of one particular channels is done v
 - Send message on the channel: `POST /channels/:channel_id/messages <JSON_SenML_string>`
 - Get messages from the channel: `GET /channels/:channel_id/messages`
 
-> **N.B.** publisher ID is passed to HTTP server via `Client-ID` header. In normal use-case this publisher ID is calculated automatically via `mainflux-auth` service and injected into the HTTP call via NGINX proxying, but for testing it can be added explicitly in the call.
+!!! note 
+     Publisher ID is passed to HTTP server via `Client-ID` header. In normal use-case this publisher ID is calculated automatically via `mainflux-auth` service and injected into the HTTP call via NGINX proxying, but for testing it can be added explicitly in the call.
 
 ```
 curl -s -S -i -X POST -H "Client-ID: 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52" -H "Content-Type: application/senml+json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
@@ -273,10 +274,11 @@ Content-Length: 209
 ]
 ```
 
-> Note that `start_time` and `end_time` should be in UNIX time format - i.e. float64 number.
->
-> Note also that `publisher` is automatically derived from MQTT client ID and set by the Mainflux system
-> - there is no action needed from user.
+!!! note
+     Note that `start_time` and `end_time` should be in UNIX time format - i.e. float64 number.
+     
+     Note also that `publisher` is automatically derived from MQTT client ID and set by the Mainflux system
+     - there is no action needed from user.
 
 ### MQTT
 Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id/messages/<content_type>` you would get the message published via HTTP POST on `mainflux/channels/:channel_id/messages` with `Content-Type: application/senml+json` header.
@@ -291,7 +293,8 @@ These topics are denoted as following:
 - `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/senml-cbor`
 - `mainflux/channels/5c912c4e-e37b-4ba6-8f4b-373c7ecfeaa9/messages/octet-stream`
 
-> Note that `+` is a wildcard character for MQTT topics, so we use `senml-json` to denote `application/senml+json` content type.
+!!! note
+     Note that `+` is a wildcard character for MQTT topics, so we use `senml-json` to denote `application/senml+json` content type.
 
 Example:
 
