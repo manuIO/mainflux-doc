@@ -251,11 +251,12 @@ These topics are denoted as following:
 
 Note that `+` is a wildcard character for MQTT topics, so we use `senml-json` to denote `application/senml+json` content type.
 
-For security purposes (auth), it is required that each client presents it's token as an  MQTT "clientID", 
+For security purposes (auth), it is required that each client presents it's token as an  MQTT "clientID" (part of MQTT standard).
+
 Example:
 
 ```
-mosquitto_sub -t mainflux/channels/7209d9b8-90af-11e7-9cf0-080027b77be6/messages/senml-json
+mosquitto_sub -i <client_token> -t mainflux/channels/7209d9b8-90af-11e7-9cf0-080027b77be6/messages/senml-json
 
 [{"bn":"8293b8fa-9039-11e7-b6e2-080027b77be6","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]
 ```
