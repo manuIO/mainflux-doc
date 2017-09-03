@@ -84,12 +84,10 @@ Configuring your Mainflux system begins with a provisioning phase. Use the Mainf
 
 ### Provisioning Devices
 Devices are provisioned by executing a HTTP request `POST /clients`, with a `"type":"device"` specified in the payload JSON.
-
-!!! note
-     You will need `user_auth_key`, i.e. user token
+Note that you will need `user_auth_key`, i.e. user token, in order to provision clients (devices and applications) that belong to this particular user.
 
 ```bash
-curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <user_auth_key>" localhost:8180/clients -d '{"type":"device", "name":"weio"}'
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/clients -d '{"type":"device", "name":"weio"}'
 ```
 
 Notice the UUID of the device in the Location header of the HTTP response:
@@ -103,6 +101,47 @@ Content-Length: 0
 
 It is important to note that the Mainflux system generates a UUID for each Device, Application or Channel it creates.
 This ID is later used to authenticate each Device on the system.
+
+### Provisioning Applications
+Applications are also Mainflux clients, as are devices. They are created in a similar fashion:
+
+```bash
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/clients -d '{"type":"app", "name":"myapp"}'
+```
+
+You'll find UUID of newly created app in HTTP response `Location` header:
+```
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Location: /clients/75a31f6f-90ad-11e7-9cef-080027b77be6
+Date: Sun, 03 Sep 2017 13:40:33 GMT
+Content-Length: 0
+```
+
+### Retrieving Clients (Devices and Apps)
+In order to check of provisioning went fine, you cold look what entities were written in the Cassandra database usin `GET /devices`:
+```bash
+curl -s -S -i --noproxy localhost -X GET -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/clients
+```
+You should obtain response similar to this:
+```json
+{
+  "clients": [
+    {
+      "id": "8293b8fa-9039-11e7-b6e2-080027b77be6",
+      "type": "device",
+      "name": "weio",
+      "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQzOTYyMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiODI5M2I4ZmEtOTAzOS0xMWU3LWI2ZTItMDgwMDI3Yjc3YmU2In0.3OX3kccV2Beh7C87GAB_FPJ6SKQeJVBTUVdQDa39TzI"
+    },
+    {
+      "id": "75a31f6f-90ad-11e7-9cef-080027b77be6",
+      "type": "app",
+      "name": "myapp",
+      "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQ0NDYwMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiNzVhMzFmNmYtOTBhZC0xMWU3LTljZWYtMDgwMDI3Yjc3YmU2In0.MEJxXI37LOGcnm50ap8DsPVQa56mg4nQ0W7ZcDE785k"
+    }
+  ]
+}
+```
 
 ### Provisioning Channels
 Channels are provisioned by executing a HTTP request `POST /channels`:
