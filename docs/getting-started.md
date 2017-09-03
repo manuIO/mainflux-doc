@@ -158,28 +158,17 @@ Date: Sun, 03 Sep 2017 13:54:46 GMT
 Content-Length: 0
 ```
 
-### Connecting Devices and Channels (Plug)
-In Mainflux IoT system, `Channel` should be observed as a MQTT topic or as a data bus - messages flow bidirectionally through the channel.
-Many devices and applications can be connected (plugged) to the channel (if they can provide adequate credentials),
-and than all connected entities will recieve the message. In this way a channel also becomes some sort of device grouping,
-but only for communication purposes.
+### Grouping Clients by Connecting Them on Channels
+Channel can be observed as a communication group of clients, i.e. and entity that is used to isolate several clients (apps and devices) in the same (communication) group. Only clients that are connected to the channel can send and receive messages from this channel. Oter clients are not permited to communicate over this channel.
 
-!!! note
-     Note that `Channel` is a data bus with broadcast-only addressing - everybody gets the message.
-     It is currently not possible to send message just to some devices on the channle, while hiding it from others.
-     If you have this use-case, then just create new channels which will be private for
-     only these devices (i.e. plug only these devices into these channels)
+Only user, who is the owner of the channel and of the clients, can connect the clients to a channel (which is equivalent to putting the clients in the same administrative group, with the persmissions to exchange messages within the group).
 
-Since we observe channel as a data bus, we say that device is "plugged into" the channel
-in order to obtain conection (i.e. to be capable to publish and get messages from the channel).
-This is obtained using the `POST /channels/<channel_id>/plug` and/or `POST /devices/<device_id>/plug` endpoint.
-
-Syntax is following:
+Connecting clients to the channel is done by adding them in the `connected` JSON payload field during the channel creation, or by updating the existing channel, like this:
 ```bash
 curl -s -S -i --noproxy localhost -X PUT -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/channels/7209d9b8-90af-11e7-9cf0-080027b77be6 -d '{"name":"mychan", "connected": ["8293b8fa-9039-11e7-b6e2-080027b77be6", "75a31f6f-90ad-11e7-9cef-080027b77be6"]}'
 ```
 
-Then you can observe that devices you plugged are recorded in the Channel's `Clients` list:
+Then you can observe that clients you connected are recorded in the channel's `connected` list:
 ```
 curl -s -S -i --noproxy localhost -X GET -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/channels/7209d9b8-90af-11e7-9cf0-080027b77be6
 
@@ -198,65 +187,56 @@ Content-Length: 154
 }
 ```
 
-Also, `ChannelID` has been recorded in any of the devices' internal structure:
-```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/devices/66990b46-8736-4182-ba21-8dabaadb27ff | jq
-
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-Date: Sun, 11 Dec 2016 19:50:20 GMT
-Content-Length: 306
-
-{
-  "id": "66990b46-8736-4182-ba21-8dabaadb27ff",
-  "name": "Some Name",
-  "description": "",
-  "online": false,
-  "connected_at": "",
-  "disconnected_at": "",
-  "channels": [
-    "78c95058-7ef3-454f-9f60-82569ddec4e2"
-  ],
-  "created": "2016-12-11T19:09:50Z",
-  "updated": "2016-12-11T19:46:40Z",
-  "metadata": {}
-}
-```
-
-There is also equivalent command `POST /devices/<device_id>/plug` which takes as an argument a list of channels
-and plugs the device in each of them.
-
 ## Publishing Values (on a Channel)
-Once a Channel is provisioned it is possible to start publishing measurements on the channel.
+Once a Channel is provisioned and client is connected to the channel, it can start to publish messages on the channel.
 
 This can be done via several protocols:
 
 - HTTP
 - MQTT
 - WebSockets (MQTT over WebSockets)
+- CoAP
 
 ### HTTP
 
-Publishing and retrieving messages (values) of one particular channels is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages` of [mainflux-http-sender](https://github.com/mainflux/mainflux-http-sender) service:
+Publishing and retrieving messages (values) of one particular channel is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages` of [http-adapter](https://github.com/mainflux/http-adapter) service:
 
-- Send message on the channel: `POST /channels/:channel_id/messages <JSON_SenML_string>`
-- Get messages from the channel: `GET /channels/:channel_id/messages`
-
-!!! note 
-     Publisher ID is passed to HTTP server via `Client-ID` header. In normal use-case this publisher ID is calculated automatically via `mainflux-auth` service and injected into the HTTP call via NGINX proxying, but for testing it can be added explicitly in the call.
-
+You will need `client_token`, i.e. auth key of the client (device or application) that tries to publish the message on the channel. You can obtain this key by observing client entity in the database:
 ```
-curl -s -S -i -X POST -H "Client-ID: 472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52" -H "Content-Type: application/senml+json" http://localhost:7070/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+curl -s -S -i --noproxy localhost -X GET -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/clients/8293b8fa-9039-11e7-b6e2-080027b77be6
 
-HTTP/1.1 202 Accepted
-Content-Type: application/senml+json; charset=utf-8
-Date: Sun, 18 Dec 2016 18:25:36 GMT
-Content-Length: 28
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Sun, 03 Sep 2017 16:12:23 GMT
+Content-Length: 273
 
 {
-  "response": "message sent"
+  "id": "8293b8fa-9039-11e7-b6e2-080027b77be6",
+  "type": "device",
+  "name": "weio",
+  "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQzOTYyMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiODI5M2I4ZmEtOTAzOS0xMWU3LWI2ZTItMDgwMDI3Yjc3YmU2In0.3OX3kccV2Beh7C87GAB_FPJ6SKQeJVBTUVdQDa39TzI"
 }
+
+Sneding message on a channel:
 ```
+curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <client_token>" localhost:7070/channels/7209d9b8-90af-11e7-9cf0-080027b77be6/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
+```
+
+You can now observe contents in the Cassandra database to see written messages:
+```bash
+cqlsh> SELECT * FROM message_writer.messages_by_channel;
+
+ channel                              | id                                   | bn              | bs | bt        | bu | bv | bver | l | n       | protocol | publisher                                                                                                                                                                                    | s | t  | u | ut | v     | vb    | vd | vs
+--------------------------------------+--------------------------------------+-----------------+----+-----------+----+----+------+---+---------+----------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---+----+---+----+-------+-------+----+----
+ 7209d9b8-90af-11e7-9cf0-080027b77be6 | fa22b310-90c3-11e7-a258-7584557e38c9 | some-base-name: |  0 | 1.276e+09 |  A |  0 |    5 |   | voltage |     HTTP | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQzOTYyMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiODI5M2I4ZmEtOTAzOS0xMWU3LWI2ZTItMDgwMDI3Yjc3YmU2In0.3OX3kccV2Beh7C87GAB_FPJ6SKQeJVBTUVdQDa39TzI | 0 |  0 | V |  0 | 120.1 | False |    |   
+ 7209d9b8-90af-11e7-9cf0-080027b77be6 | fa252410-90c3-11e7-a258-7584557e38c9 |                 |  0 |         0 |    |  0 |    0 |   | current |     HTTP | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQzOTYyMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiODI5M2I4ZmEtOTAzOS0xMWU3LWI2ZTItMDgwMDI3Yjc3YmU2In0.3OX3kccV2Beh7C87GAB_FPJ6SKQeJVBTUVdQDa39TzI | 0 | -5 |   |  0 |   1.2 | False |    |   
+ 7209d9b8-90af-11e7-9cf0-080027b77be6 | fa260e70-90c3-11e7-a258-7584557e38c9 |                 |  0 |         0 |    |  0 |    0 |   | current |     HTTP | eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQzOTYyMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiODI5M2I4ZmEtOTAzOS0xMWU3LWI2ZTItMDgwMDI3Yjc3YmU2In0.3OX3kccV2Beh7C87GAB_FPJ6SKQeJVBTUVdQDa39TzI | 0 | -4 |   |  0 |   1.3 | False |    |   
+
+(3 rows)
+```
+
+
+
 
 Check if the messages have been written on the channel by reading from [mainflux-influxdb-reader](https://github.com/mainflux/mainflux-influxdb-reader) service:
 
