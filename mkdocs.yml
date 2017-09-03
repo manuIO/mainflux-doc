@@ -22,11 +22,11 @@
 site_name: Mainflux
 site_description: Mainflux IoT System
 site_author: Drasko DRASKOVIC
-site_url: http://mainflux.io
+site_url: http://mainflux.com
 
 # Repository
 repo_name: GitHub
-repo_url: https://github.com/mainflux/mainflux
+repo_url: https://github.com/mainflux/doc
 
 # Copyright
 copyright: Copyright (c) 2016 Mainflux
