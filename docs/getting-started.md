@@ -265,7 +265,6 @@ Publishing via MQTT is done in the similar way:
 ```
 mosquitto_pub -i <client_token> -t mainflux/channels/7209d9b8-90af-11e7-9cf0-080027b77be6/messages/seml-json -m '[{"bn":"8293b8fa-9039-11e7-b6e2-080027b77be6","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
-e
 
 ### Websockets
 Mainflux also supports Websockets with MQTT over WS.
