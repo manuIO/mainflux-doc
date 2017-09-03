@@ -216,9 +216,10 @@ Content-Length: 273
   "name": "weio",
   "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MDQzOTYyMzMsImlzcyI6Im1haW5mbHV4Iiwic3ViIjoiODI5M2I4ZmEtOTAzOS0xMWU3LWI2ZTItMDgwMDI3Yjc3YmU2In0.3OX3kccV2Beh7C87GAB_FPJ6SKQeJVBTUVdQDa39TzI"
 }
+```
 
 Sneding message on a channel:
-```
+```bash
 curl -s -S -i -X POST -H "Content-Type: application/senml+json" -H "Authorization: <client_token>" localhost:7070/channels/7209d9b8-90af-11e7-9cf0-080027b77be6/messages -d '[{"bn":"some-base-name:","bt":1.276020076001e+09, "bu":"A","bver":5, "n":"voltage","u":"V","v":120.1}, {"n":"current","t":-5,"v":1.2}, {"n":"current","t":-4,"v":1.3}]'
 ```
 
@@ -234,82 +235,6 @@ cqlsh> SELECT * FROM message_writer.messages_by_channel;
 
 (3 rows)
 ```
-
-
-
-
-Check if the messages have been written on the channel by reading from [mainflux-influxdb-reader](https://github.com/mainflux/mainflux-influxdb-reader) service:
-
-```
-curl -s -S -i -X GET -H "Content-Type: application/senml+json" 'http://localhost:7080/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages' | jq
-
-HTTP/1.1 200 OK
-Content-Type: application/senml+json; charset=utf-8
-Date: Sun, 18 Dec 2016 18:26:27 GMT
-Content-Length: 627
-
-[
-  {
-    "bver": 5,
-    "n": "some-base-name:voltage",
-    "u": "V",
-    "t": 1276020076.001,
-    "v": 120.1,
-    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
-    "timestamp": "2016-12-18T18:25:36Z",
-    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
-  },
-  {
-    "bver": 5,
-    "n": "some-base-name:current",
-    "u": "A",
-    "t": 1276020071.001,
-    "v": 1.2,
-    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
-    "timestamp": "2016-12-18T18:25:36Z",
-    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
-  },
-  {
-    "bver": 5,
-    "n": "some-base-name:current",
-    "u": "A",
-    "t": 1276020072.001,
-    "v": 1.3,
-    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
-    "timestamp": "2016-12-18T18:25:36Z",
-    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
-  }
-]
-```
-
-`GET /channels/:channel_id/messages` supports also query parameters, so you can filter your search by time interval like this:
-```
-curl -s -S -i -X GET -H "Content-Type: application/senml+json" 'http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/messages?start_time=1276020071.9&end_time=1276020075.999' | json | pygmentize -l json
-
-HTTP/1.1 200 OK
-Content-Type: application/senml+json; charset=utf-8
-Date: Sun, 18 Dec 2016 18:30:15 GMT
-Content-Length: 209
-
-[
-  {
-    "bver": 5,
-    "n": "some-base-name:current",
-    "u": "A",
-    "t": 1276020072.001,
-    "v": 1.3,
-    "publisher": "472dceec-9bc2-4cd4-9f16-bf3b8d1d3c52",
-    "timestamp": "2016-12-18T18:25:36Z",
-    "channel": "78c95058-7ef3-454f-9f60-82569ddec4e2"
-  }
-]
-```
-
-!!! note
-     Note that `start_time` and `end_time` should be in UNIX time format - i.e. float64 number.
-     
-     Note also that `publisher` is automatically derived from MQTT client ID and set by the Mainflux system
-     - there is no action needed from user.
 
 ### MQTT
 Mainflux is acting as a seamless multi-protocol bridge. If you were subscribed to an MQTT topic `mainflux/channels/:channel_id/messages/<content_type>` you would get the message published via HTTP POST on `mainflux/channels/:channel_id/messages` with `Content-Type: application/senml+json` header.
