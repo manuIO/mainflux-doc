@@ -146,12 +146,16 @@ You should obtain response similar to this:
 ### Provisioning Channels
 Channels are provisioned by executing a HTTP request `POST /channels`:
 ```bash
-curl -s -S -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/channels
+curl -s -S -i --noproxy localhost -X POST -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/channels -d '{"name":"mychan"}'
 ```
 
-List your Channels:
+Again, UUID of newly created resource is returned in `Location` HTTP header:
 ```bash
-curl http://localhost:9090/channels | jq
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Location: /channels/7209d9b8-90af-11e7-9cf0-080027b77be6
+Date: Sun, 03 Sep 2017 13:54:46 GMT
+Content-Length: 0
 ```
 
 ### Connecting Devices and Channels (Plug)
@@ -171,42 +175,26 @@ in order to obtain conection (i.e. to be capable to publish and get messages fro
 This is obtained using the `POST /channels/<channel_id>/plug` and/or `POST /devices/<device_id>/plug` endpoint.
 
 Syntax is following:
+```bash
+curl -s -S -i --noproxy localhost -X PUT -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/channels/7209d9b8-90af-11e7-9cf0-080027b77be6 -d '{"name":"mychan", "connected": ["8293b8fa-9039-11e7-b6e2-080027b77be6", "75a31f6f-90ad-11e7-9cef-080027b77be6"]}'
 ```
-curl -s -S -i -X POST -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2/plug -d '["66990b46-8736-4182-ba21-8dabaadb27ff", "97bd76d3-8f8f-4e1f-8c20-4a6c84d3575f", "a76539f2-8cdf-4568-bdbd-f1c617e5516a"]' | json | pygmentize -l json
+
+Then you can observe that devices you plugged are recorded in the Channel's `Clients` list:
+```
+curl -s -S -i --noproxy localhost -X GET -H "Content-Type: application/senml+json" -H "Authorization: <user_token>" localhost:8180/channels/7209d9b8-90af-11e7-9cf0-080027b77be6
 
 HTTP/1.1 200 OK
 Content-Type: application/json; charset=utf-8
-Date: Sun, 11 Dec 2016 19:46:40 GMT
-Content-Length: 69
+Date: Sun, 03 Sep 2017 14:05:19 GMT
+Content-Length: 154
 
 {
-  "response": "plugged",
-  "id": "78c95058-7ef3-454f-9f60-82569ddec4e2"
-}
-```
-
-Then you can observe that devices you plugged are recorded in the Channel's `Devices` list:
-```
-curl -s -S -i -X GET -H "Accept: application/json" -H "Content-Type: application/json" http://localhost:9090/channels/78c95058-7ef3-454f-9f60-82569ddec4e2 | jq
-
-HTTP/1.1 200 OK
-Content-Type: application/json; charset=utf-8
-Date: Sun, 11 Dec 2016 19:47:54 GMT
-Content-Length: 301
-
-{
-  "id": "78c95058-7ef3-454f-9f60-82569ddec4e2",
-  "visibility": "private",
-  "owner": "",
-  "entries": [],
-  "devices": [
-    "66990b46-8736-4182-ba21-8dabaadb27ff",
-    "97bd76d3-8f8f-4e1f-8c20-4a6c84d3575f",
-    "a76539f2-8cdf-4568-bdbd-f1c617e5516a"
-  ],
-  "created": "2016-12-11T19:21:30Z",
-  "updated": "2016-12-11T19:46:40Z",
-  "metadata": {}
+  "id": "7209d9b8-90af-11e7-9cf0-080027b77be6",
+  "name": "mychan",
+  "connected": [
+    "75a31f6f-90ad-11e7-9cef-080027b77be6",
+    "8293b8fa-9039-11e7-b6e2-080027b77be6"
+  ]
 }
 ```
 
