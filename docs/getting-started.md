@@ -24,10 +24,10 @@ docker-compose up
 ## Basic Concepts
 The Mainflux system operates on four main entities (data structures): Users, Devices, Channels and Applications. Devices and Applications are **clients** of the Mainflux system (i.e. they connect to Mainflux servers and send/receive some messages).
 
-1. `User` represents the real (human) user of the system. User logs into the system and creates some assets - Devices and Applications - that he will own and manage later though Mainflux system. User structure can be seen [here](https://github.com/mainflux/mainflux/blob/master/manager/users.go#L7)
+1. `User` represents the real (human) user of the system. User logs into the system and creates some assets - Devices and Applications - that he will own and manage later though Mainflux system. User structure can be seen [here](https://github.com/mainflux/mainflux/blob/master/manager/users.go)
 
 2. `Device` is used to represent any device that connects to Mainflux. It is a generic model
-that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux/blob/master/manager/clients.go#L7).
+that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux/blob/master/manager/clients.go).
 
 3. `Application` is very similar to the `Device` and is represented by the same `Client` structure (just with different `type` field). Application represents an end-user application that communicates with devices via Mainflux, and can be running somewhere in the cloud, locally on the PC or on the mobile phone - it is usually some UI app that shows dashboards and graphs of the sensor measurements.
 
