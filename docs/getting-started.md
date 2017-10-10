@@ -1,7 +1,7 @@
 # Getting Started
 Mainflux is a composition of microservices.
 
-Docker containers are provided for each [Mainflux component](http://mainflux.io/#architecture).
+Docker containers are provided for each [Mainflux component](http://mainflux.readthedocs.io/en/latest/#architecture).
 
 ## Prerequisites
 
@@ -24,10 +24,10 @@ docker-compose up
 ## Basic Concepts
 The Mainflux system operates on four main entities (data structures): Users, Devices, Channels and Applications. Devices and Applications are **clients** of the Mainflux system (i.e. they connect to Mainflux servers and send/receive some messages).
 
-1. `User` represents the real (human) user of the system. User logs into the system and creates some assets - Devices and Applications - that he will own and manage later though Mainflux system. User structure can be seen [here](https://github.com/mainflux/manager/blob/master/users.go)
+1. `User` represents the real (human) user of the system. User logs into the system and creates some assets - Devices and Applications - that he will own and manage later though Mainflux system. User structure can be seen [here](https://github.com/mainflux/mainflux/blob/master/manager/users.go)
 
 2. `Device` is used to represent any device that connects to Mainflux. It is a generic model
-that describes any client device of the system via simple structure like [this](https://github.com/mainflux/manager/blob/master/clients.go).
+that describes any client device of the system via simple structure like [this](https://github.com/mainflux/mainflux/blob/master/manager/clients.go).
 
 3. `Application` is very similar to the `Device` and is represented by the same `Client` structure (just with different `type` field). Application represents an end-user application that communicates with devices via Mainflux, and can be running somewhere in the cloud, locally on the PC or on the mobile phone - it is usually some UI app that shows dashboards and graphs of the sensor measurements.
 
@@ -80,7 +80,7 @@ Response:
 ```
 
 ## System Provisioning
-Configuring your Mainflux system begins with a provisioning phase. Use the Mainflux [manager](https://github.com/mainflux/manager) HTTP/REST API to provision Devices, Applications and Channels.
+Configuring your Mainflux system begins with a provisioning phase. Use the Mainflux [manager](https://github.com/mainflux/mainflux/tree/master/manager) HTTP/REST API to provision Devices, Applications and Channels.
 
 ### Provisioning Devices
 Devices are provisioned by executing a HTTP request `POST /clients`, with a `"type":"device"` specified in the payload JSON.
@@ -199,7 +199,7 @@ This can be done via several protocols:
 
 ### HTTP
 
-Publishing and retrieving messages (values) of one particular channel is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages` of [http-adapter](https://github.com/mainflux/http-adapter) service:
+Publishing and retrieving messages (values) of one particular channel is done via `POST` or `GET` on an API endpoint `/channels/:channel_id/messages` of [http-adapter](https://github.com/mainflux/mainflux/tree/master/http) service:
 
 You will need `client_token`, i.e. auth key of the client (device or application) that tries to publish the message on the channel. You can obtain this key by observing client entity in the database:
 ```
