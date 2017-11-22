@@ -34,16 +34,16 @@ Mainflux IoT cloud is composed of several components, i.e. microservices:
 
 | Link          | Description           |
 |:--------------|:----------------------|
-| [http-adapter](https://github.com/mainflux/mainflux/tree/master/http) | HTTP message API server |
 | [manager](https://github.com/mainflux/mainflux/tree/master/manager) | Service for managing platform resources, including auth |
-| [message-writer](https://github.com/mainflux/mainflux/tree/master/writer) | Worker behind NATS that writes messages into Cassandra DB |
+| [http-adapter](https://github.com/mainflux/mainflux/tree/master/http) | HTTP message API server |
 | [mqtt-adapter](https://github.com/mainflux/mqtt-adapter) | MQTT PUB/SUB Broker (with WebSocket support) |
-| [mainflux-coap](https://github.com/mainflux/mainflux-coap) | CoAP Server |
-| [mainflux-ui](https://github.com/mainflux/mainflux-ui)     | System Dashboard in Angular 2 Material |
-| [mainflux-cli](https://github.com/mainflux/mainflux-cli)   | Interactive command-line interface |
-| [Cassandra](https://github.com/apache/cassandra)           | System Database |
-| [NATS](https://github.com/nats-io/gnatsd)                  | System event bus |
-| [NGINX](https://github.com/nginx/nginx)                    | Reverse Proxy with Auth forwarding |
+| [mainflux-coap](https://github.com/mainflux/mainflux/tree/master/coap) | CoAP message API server |
+| [message-writer](https://github.com/mainflux/mainflux/tree/master/writer) | Worker behind NATS that writes messages into Cassandra DB |
+| [dashflux](https://github.com/mainflux/dashflux) | System Dashboard in Angular 2 Material |
+| [bashflux](https://github.com/mainflux/bashflux) | Interactive command-line interface |
+| [Cassandra](https://github.com/apache/cassandra) | System Database |
+| [NATS](https://github.com/nats-io/gnatsd) | System event bus |
+| [NGINX](https://github.com/nginx/nginx) | Reverse Proxy with Auth forwarding |
 
 ![arch](img/architecture.jpg)
 
